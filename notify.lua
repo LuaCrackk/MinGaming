@@ -1,1 +1,1 @@
-Xin chào Roblox!
+Hello Roblox từ Discord
