@@ -1,1 +1,1 @@
-test nè
+gửi tin nhắn
