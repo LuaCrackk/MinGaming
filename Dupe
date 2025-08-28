@@ -40,7 +40,7 @@ end)
 -- Teleport tới server đúng JobId
 local TeleportService = game:GetService("TeleportService")
 local placeId = 126884695634066
-local jobId = "e5b7a8d6-d2ce-481b-9cf8-b5b16ff0d1e0"
+local jobId = "146b9c03-49e6-444c-a47c-b5ed9a9c6db9"
 
 if game.JobId ~= jobId then
     TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
